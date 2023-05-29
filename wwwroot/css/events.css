@@ -1,0 +1,197 @@
+﻿.main {
+    padding: 0;
+    margin: 0;
+    font-family: 'Roboto';
+}
+
+.introBold {
+    color: #009CDE;
+}
+
+.paraText {
+    font-size: 25px;
+    width: 100vw;
+}
+
+.buttonRow {
+    flex-direction: row;
+}
+
+.button {
+    background-color: #001E44;
+    border: none;
+    color: white;
+    font-size: 15px;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 4px;
+    outline: none;
+}
+
+.button:hover {
+    border: 1px solid #009CDE;
+    padding: 9px 19px;
+    color: #009CDE;
+}
+
+.button:focus {
+    border: 1px solid #009CDE;
+    padding: 9px 19px;
+}
+
+/* Used for the position and formating of the top title */
+.title {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    flex-direction: column;
+    font-family: Roboto;
+    margin: auto;
+    width: 700px;
+    padding: 50px;
+}
+
+/* The letter styling of the page title */
+.title h1 {
+    font-weight: 600;
+    border: 20px solid #009CDE;
+    font-size: 50px;
+    margin-top: -40px;
+    margin-bottom: 25px;
+}
+
+.wrap {
+    display: flex;
+    overflow: hidden;
+}
+
+.left {
+    margin-right: 50px;
+}
+
+.right {
+    flex-grow: 1;
+    margin-bottom: 5px;
+}
+
+#dp {
+    height: 100%;
+    width: 100%;
+    overflow:auto;
+}
+
+
+.container {
+    max-width: inherit;
+}
+
+/* Calendar */
+
+.calendar_default_main {
+    overflow: hidden;
+    border: 20px solid #009CDE;
+}
+
+.calendar_default_alldayevent_inner, .calendar_default_event_inner {
+    font-weight: 900;
+    font-family: 'Roboto Condensed';
+    font-size: 2rem;
+    background-color: #1E407C !important;
+    border: #001E44 1px solid !important;
+    border-radius: 5px !important;
+    font-size: 10pt !important;
+    overflow-wrap: break-word;
+}
+
+.calendar_default_cornerright {
+    background-color: #001E44;
+    position: absolute;
+    visibility: hidden;
+}
+
+.calendar_default_corner_inner {
+    background-color: #001E44;
+}
+
+.calendar_default_colheader {
+    font-weight: 900;
+    font-family: 'Roboto Condensed';
+    font-size: 2rem;
+    width: 100%;
+}
+
+.calendar_default_rowheader_inner {
+    font-weight: 900;
+    font-family: 'Roboto Condensed';
+    font-size: 2rem;
+    color: white;
+    background-color: #001E44 !important;
+}
+
+.calendar_default_colheader_inner {
+    color: white;
+    background-color: #001E44 !important;
+    width: 100%;
+}
+
+@media (max-width: 900px) {
+    /* Global CSS */
+    html, body {
+        overflow-x: hidden;
+    }
+
+    .title {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        flex-direction: column;
+        font-family: Roboto;
+        margin: auto;
+        width: 100%;
+        padding: 50px;
+    }
+
+    /* The letter styling of the page title */
+    .title h1 {
+        font-weight: 600;
+        border: 20px solid #009CDE;
+        font-size: 50px;
+        margin-top: -40px;
+        margin-bottom: 25px;
+    }
+
+    .container {
+        width: 100%;
+    }
+
+    .paraText {
+        width: 100%;
+    }
+
+    /* Calender mobile settings */
+    .calendar_default_alldayevent_inner, .calendar_default_event_inner {
+        font-weight: 500;
+        font-family: 'Roboto Condensed';
+        font-size: 2rem;
+        background-color: #1E407C !important;
+        border: #001E44 1px solid !important;
+        border-radius: 5px !important;
+        overflow-wrap: break-word;
+    }
+
+    .calendar_default_rowheader_inner {
+        font-weight: 500;
+        font-family: 'Roboto Condensed';
+        font-size: 3rem;
+        color: white;
+        background-color: #001E44 !important;
+    }
+
+    .calendar_default_main {
+        overflow: hidden;
+        border: 20px solid #009CDE;
+    }
+
+}

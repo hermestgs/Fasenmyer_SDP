@@ -1,0 +1,46 @@
+﻿@model FasenmyerConference.Models.HomePage
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Home Page</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group" style="width:1000px;">
+                <label asp-for="WelcomeArea" class="control-label" style="font-size:26px;"></label>
+                <textarea asp-for="WelcomeArea" class="form-control"></textarea>
+                <span asp-validation-for="WelcomeArea" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="width:1000px;">
+                <label asp-for="KeynoteIntro" class="control-label" style="font-size:26px;"></label>
+                <textarea asp-for="KeynoteIntro" class="form-control"></textarea>
+                <span asp-validation-for="KeynoteIntro" class="text-danger"></span>
+            </div>
+            <div class="form-group"style="width:1000px;">
+                <label asp-for="SpotlightIntro" class="control-label" style="font-size:26px;"></label>
+                <textarea asp-for="SpotlightIntro" class="form-control"></textarea>
+                <span asp-validation-for="SpotlightIntro" class="text-danger"></span>
+            </div>
+            <div class="form-group"style="width:1000px;">
+                <label asp-for="ContactInfo" class="control-label" style="font-size:26px;"></label>
+                <textarea asp-for="ContactInfo" class="form-control"> </textarea>
+                <span asp-validation-for="ContactInfo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

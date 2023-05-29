@@ -1,0 +1,21 @@
+﻿@model IEnumerable<FasenmyerConference.Models.Presentations>
+
+
+@{
+    ViewData["Title"] = "Map";
+}
+
+<h1> Burke Building Map </h1>
+<div> 
+    <form>
+        <div class="form-group">
+            <input type="button" value="ROOM" class="btn btn-primary" />
+        </div>
+
+        <form asp-controller="Presentations" asp-action="Index" method="get">
+        <p>
+            Room 101: <input type="submit" value="ROOM" />
+        </p>
+        </form>
+    </form>
+</div>

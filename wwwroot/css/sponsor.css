@@ -1,0 +1,145 @@
+﻿body, html, main {
+    height: 100%;
+    font-family: 'Roboto';
+}
+
+/* This will dictate the characteristics of top area of writing on home page*/
+.topPara {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    flex-direction: column;
+    font-family: Roboto;
+    margin: auto;
+    width: 100%;
+    padding: 50px;
+}
+
+    /* The header-2 for the column based text sections */
+    .topPara h1 {
+        width: 60%;
+        font-weight: 900;
+        border: 20px solid #009CDE;
+        font-size: 50px;
+    }
+
+    /* Controls the font size for text portion text*/
+    .topPara p {
+        font-size: 25px;
+    }
+
+/* Allows row based display within the larger column display in topPara*/
+.sidePara {
+    width: 85vw;
+    padding: 10px;
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+}
+
+/* Used for image display for rows (image and text side-by-side) */
+.sideParaPhoto img {
+    height: 400px;
+    width: 300px;
+    border: 20px solid #009CDE;
+}
+
+@media (max-width: 1000px) {
+
+    /* Global CSS */
+    html, body {
+        overflow-x: hidden;
+    }
+
+    /* Used for each section paragraph/section (between parallax sections) */
+    .topPara {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        flex-direction: column;
+        font-family: Roboto;
+        margin: 0px;
+        margin-top: 5px;
+        width: 100%;
+        padding: 25px;
+    }
+
+        /* The header-2 for the column based text sections */
+        .topPara h1 {
+            width: 100%;
+            font-weight: 900;
+            border: 20px solid #009CDE;
+            font-size: 50px;
+        }
+
+    /* For the Keynote speaker */
+    .sidePara {
+        width: 90vw;
+        padding: 5px;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    /* Keynote speaker photo */
+    .sideParaPhoto {
+        border: solid #009CDE;
+    }
+
+        .sideParaPhoto img {
+            height: 100%;
+            width: 100%;
+        }
+}
+
+@media (max-width: 300px) {
+
+    /* Global CSS */
+    html, body {
+        overflow-x: hidden;
+    }
+
+    /* Used for each section paragraph/section (between parallax sections) */
+    .topPara {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        flex-direction: column;
+        font-family: Roboto;
+        margin: 0px;
+        margin-top: 5px;
+        width: 100%;
+        padding: 25px;
+    }
+
+        /* The header-2 for the column based text sections */
+        .topPara h1 {
+            width: 100%;
+            font-weight: 900;
+            border: 20px solid #009CDE;
+            font-size: 25px;
+        }
+
+    /* For the Keynote speaker */
+    .sidePara {
+        width: 90vw;
+        padding: 5px;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    /* Keynote speaker photo */
+    .sideParaPhoto {
+        border: solid #009CDE;
+    }
+
+        .sideParaPhoto img {
+            height: 100%;
+            width: 100%;
+        }
+}

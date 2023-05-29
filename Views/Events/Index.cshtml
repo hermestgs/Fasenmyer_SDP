@@ -1,0 +1,231 @@
+﻿@{
+    ViewData["Title"] = "Scheduler";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <script src="~/lib/daypilot/daypilot-all.min.js" asp-append-version="true"></script>
+    <script src="~/lib/ics/ics.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jsPDF/jspdf.min.js" asp-append-version="true"></script>
+    <script src="~/lib/autoTablejsPDF/autoTablejsPDF.min.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
+    <link rel="stylesheet" href="~/css/events.css" asp-append-version="true" />
+
+</head>
+
+<body>
+    <header class="title">
+        <h1>Events Scheduler</h1>
+        <p class="paraText">
+            The <b class="introBold">Events Scheduler</b> allows you to personalize your schedule.<br />
+            You can customize, save and share your experience.<br />
+            <b>Presentations can be exported as a PDF or to Microsoft Outlook, Google, and Apple Calendars.</b><br />
+            Come join our students, sponsors, advisors and staff as we <b class="introBold">Inspire, Innovate</b> and <b class="introBold">Create</b>
+        </p>
+        <div class="buttonRow">
+            <button class="button btn mb-3" onclick="exportICS()">Export ICS</button>
+            <button class="button btn mb-3" onclick="exportPDF()">Export PDF</button>
+        </div>
+
+    </header>
+
+    <main>
+
+        <div class="wrap">
+            <div class="left">
+                <div style="display:flex; margin-bottom: 10px; align-items: center;">
+                    <label for="filterMajor">Filter By Major :</label>
+                    <select style="margin-left:10px; margin-right:10px;" name="filterMajor" id="filterMajor">
+                        <option value="ALL">ALL</option>
+                    </select>
+                    <button class="button" onclick="filterByMajorFunction()">Filter</button>
+                </div>
+                <div id="nav"></div>
+            </div>
+            <div class="right">
+                <div id="dp"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let fetchedData = [];
+
+        const populateMajorSelect = () => {
+            document.getElementById("filterMajor").innerHTML = "";
+            let tempOptionElement = document.createElement("option");
+            tempOptionElement.value = "ALL";
+            tempOptionElement.innerText = "ALL";
+            document.getElementById("filterMajor").appendChild(tempOptionElement)
+
+            setTimeout(() => {
+                let allMajorsArr = []
+                for (let index = 0; index < dp.events.list.length; index++) {
+                    let element = dp.events.list[index];
+                    allMajorsArr.push(element.major)
+                }
+                let allMajors = new Set(allMajorsArr);
+
+                console.log(allMajors)
+                allMajors.forEach(item => {
+                    let tempOptionElement = document.createElement("option");
+                    tempOptionElement.value = item;
+                    tempOptionElement.innerText = item;
+                    document.getElementById("filterMajor").appendChild(tempOptionElement)
+                })
+            }, 200)
+        }
+
+        const nav = new DayPilot.Navigator("nav", {
+            showMonths: 1,
+            skipMonths: 1,
+            selectMode: "Day",
+            onTimeRangeSelected: args => {
+                dp.startDate = args.day;
+                dp.update();
+                dp.eventMoveHandling = "Disabled";
+                dp.eventResizeHandling = "Disabled";
+                dp.events.load("/api/background",
+                    function success(args) {
+                        fetchedData = args.data;
+                        populateMajorSelect();
+                        console.log("Events loaded");
+                    },
+                    function error(args) {
+                        dp.message("Loading failed.");
+                    }
+                );
+            }
+        });
+        nav.init();
+
+        const dp = new DayPilot.Calendar("dp", {
+            viewType: "Resources",
+            contextMenu: new DayPilot.Menu({
+                items: [
+                    {
+                        text: "Export ICS",
+                        onClick: async (args) => {
+                            const element = args.source.data;
+                            const ICSFile = ics();
+                            ICSFile.addEvent(element.text, `Sponsor: ${element.sponsor},Student1: ${element.student1},Student2: ${element.student2},Student3: ${element.student3},Student4: ${element.student4},Major: ${element.major},Room: ${element.room},Advisor: ${element.advisor}`, "", element.start, element.end);
+                            ICSFile.download("Schedule");
+                        }
+                    },
+                ]
+            }),
+            onBeforeEventRender: (args) => {
+                args.data.barHidden = true;
+                args.data.backColor = "#2e78d6";
+                args.data.fontColor = "white";
+                args.data.areas = [
+                    {
+                        top: 4,
+                        right: 4,
+                        width: 16,
+                        height: 16,
+                        symbol: "icons/daypilot.svg#minichevron-down-2",
+                        visibility: "Hover",
+                        action: "ContextMenu",
+                        style: "background-color: #f9f9f9; border: 1px solid #ccc; padding: 2px; border-radius: 15px; cursor:pointer;"
+                    }
+                ];
+            }
+        });
+        dp.columns.list = [
+            { name: "Room 1", id: "1" },
+            { name: "Room 2", id: "2" },
+            { name: "Room 102", id: "102" },
+            { name: "Room 103", id: "103" },
+            { name: "Room 104", id: "104" },
+            { name: "Room 105", id: "105" },
+            { name: "Room 106", id: "106" },
+            { name: "Room 107", id: "107" },
+            { name: "Room 202", id: "202" },
+            { name: "Room 203", id: "203" },
+            { name: "Room 204", id: "204" },
+            { name: "Room 205", id: "205" },
+            { name: "Room 206", id: "206" },
+            { name: "Room 207", id: "207" },
+        ];
+        dp.cellHeight = 125;
+        dp.width = "100%";
+        dp.cellMarginBottom = 10;
+        dp.init();
+
+        const app = {
+            init() {
+                dp.events.load("/api/background/",
+                    function success(args) {
+                        fetchedData = args.data;
+                        populateMajorSelect();
+                        console.log("Events loaded");
+                    },
+                    function error(args) {
+                        dp.message("Loading failed.");
+                    }
+                );
+            }
+        };
+        app.init();
+
+
+        const exportICS = () => {
+            var ICSFile = ics();
+            for (let index = 0; index < dp.events.list.length; index++) {
+                let element = dp.events.list[index];
+                ICSFile.addEvent(element.text, `Sponsor: ${element.sponsor}, Student1: ${element.student1}, Student2: ${element.student2}, Student3: ${element.student3}, Student4: ${element.student4}, Major: ${element.major}, Room: ${element.room}, Advisor: ${element.advisor}`, "", element.start, element.end);
+            }
+            ICSFile.download("Schedules");
+        }
+
+        const exportPDF = () => {
+            window.jsPDF = window.jspdf.jsPDF;
+            var doc = new jsPDF('p', 'mm', 'a2');
+            let temp = []
+            dp.events.list.forEach(item => {
+                let startDate = new Date(item.start);
+                let startTime = `${startDate.getHours()}:${(startDate.getMinutes() < 10 ? '0' : '') + startDate.getMinutes()}`;
+
+                let endDate = new Date(item.end);
+                let endTime = `${endDate.getHours()}:${(endDate.getMinutes() < 10 ? '0' : '') + endDate.getMinutes()}`;
+
+                temp.push([item.text, `${startDate.getDate()}/${startDate.getMonth()}/${startDate.getFullYear()}`, startTime + " - " + endTime, item.room])
+            })
+            doc.autoTable({
+                head: [['Presentation Name', 'Date', 'Time', 'Room']],
+                body: temp,
+            })
+            doc.save('events.pdf')
+        }
+
+        const filterByMajorFunction = () => {
+            console.log(document.getElementById("filterMajor").value)
+            console.log(dp.events.list)
+            console.log(fetchedData)
+            if (document.getElementById("filterMajor").value === "ALL") {
+                dp.events.list = fetchedData;
+            } else {
+                dp.events.list = fetchedData.filter(item => item.major === document.getElementById("filterMajor").value)
+            }
+            dp.update();
+        }
+
+        setInterval(() => {
+            document.getElementById("dp").style.overflow = "auto";
+            
+            if (window.innerWidth <= 1200) {
+                document.getElementById("dp").style.marginTop = "30px"; 
+                document.getElementsByClassName("wrap")[0].style.flexDirection = "column";
+                
+                document.getElementById("dp").children[0].style.width = "200vh";
+                document.getElementById("dp").children[1].style.width = "200vh";
+            }
+        }, 200);
+    </script>
+
+</body>
+</html>

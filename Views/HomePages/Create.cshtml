@@ -1,0 +1,46 @@
+﻿@model FasenmyerConference.Models.HomePage
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>HomePage</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" style="width:1000px;">
+                <label asp-for="WelcomeArea" class="control-label"></label>
+                <textarea asp-for="WelcomeArea" class="form-control"></textarea>
+                <span asp-validation-for="WelcomeArea" class="text-danger"></span>
+            </div>
+     
+            <div class="form-group" style="width:1000px;">
+                <label asp-for="KeynoteIntro" class="control-label"></label>
+                <textarea asp-for="KeynoteIntro" class="form-control"></textarea>
+                <span asp-validation-for="KeynoteIntro" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="width:1000px;">
+                <label asp-for="SpotlightIntro" class="control-label"></label>
+                <textarea asp-for="SpotlightIntro" class="form-control"></textarea>
+                <span asp-validation-for="SpotlightIntro" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="width:1000px;">
+                <label asp-for="ContactInfo" class="control-label"></label>
+                <input asp-for="ContactInfo" class="form-control" />
+                <span asp-validation-for="ContactInfo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

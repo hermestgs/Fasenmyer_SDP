@@ -1,0 +1,306 @@
+﻿@model IEnumerable<FasenmyerConference.Models.Presentations>
+
+@{
+    ViewData["Title"] = "Presentations";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Used for importing values and setting up environment -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Used for the animated typing portions above search-bar -->
+    <!-- For more info: https://github.com/mattboldt/typed.js/ -->
+    <script src="https://unpkg.com/typed.js@2.0.14/dist/typed.umd.js"></script>
+    <link rel="stylesheet" href="~/css/presentations.css" asp-append-version="true" />
+
+    <title>Presentations</title>
+</head>
+
+<body>
+
+    <header class="title">
+        <!-- Title for the page -->
+        <h1>Search Presentations</h1>
+
+        <!-- The parallax section -->
+        <div>
+            <section class="parallax-section">
+                <div class="parallax" style="background-image: url(../UploadedFiles/Images/ErieFall2018-29.png)">
+                    <!-- This is used for the animated JavaScript text -->
+                    <h2 class="typeText">.<span class="auto-type-presentations"></span></h2>
+                </div>
+            </section>
+        </div>
+
+        <div>
+            <p class="paraText">
+                The <b class="introBold">Presentations</b> section contains the culmination of a year of <br />
+                <b class="introBold">dedication, determination, discipline</b> and <b class="introBold">perseverance.</b><br />
+                You can search through a collection of Penn State Behrend's capstone projects. <br />
+                <b>Search by project, student/advisor names, sponsors, room numbers and departments.</b> <br />
+                Click the plus icon on the results for more presentation information.
+
+            </p>
+        </div>
+
+
+        <!-- The search bar section -->
+        <form asp-controller="Presentations" asp-action="Index" method="get">
+
+            <!-- The actual search bar and mini Penn State logo on the side -->
+            <div class="bar">
+                <input class="searchbar" type="text" name="SearchString" placeholder="Search Students and Presentations">
+                <button class="miniButton" type="submit" value="Search reset">
+                    <img src="~/UploadedFiles/Images/psu_avatar-100x50_smolBoi.png" title="We are Penn State">
+                </button>
+            </div>
+
+            <!-- The Google style search buttons below the search bar -->
+            <div class="buttons">
+                <button class="button" type="submit" value="Search">Project Search</button>
+                <button class="button" type="submit" value="Reset">Reset Search</button>
+            </div>
+
+        </form>
+
+                 
+    </header>
+
+    <main>
+        <!-- The table container that makes it more mobile friendly -->
+        <div class="container first-container col-sm-12">
+
+            <!-- Creates the header and makes the columns unique fixed length -->
+            <table class="table table-condensed">
+                <!-- The table header -->
+                <colgroup>
+                    <col span="1" style="width: 90%;">
+                    <col span="1" style="width: 9%;">
+                    <col span="1" style="width: 1%;">
+                </colgroup>
+                <thead style="background: #001E44;">
+                    <tr>
+                        <th style="color: white">Project</th>
+                        <th style="color: white">Major/Dept</th>
+                        <th style="color: white"></th>
+                    </tr>
+                </thead>
+
+                <!-- The table body -->
+                <tbody >
+                    @foreach (var item in Model) {
+                    <!-- This is the visible section -->
+                        <tr class="sub-container" style="color: @TextColorSwitch(item.Major); background: @ColorSwitch(item.Major);">
+                            <td>
+                            @Html.DisplayFor(modelItem => item.PName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Major)
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-success exploder">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </td>
+                    </tr>
+                        <!-- The hidden text portion that will expand -->
+                        <tr class="explode hide presentationData">
+                            <td colspan="4" style="color: @TextColorSwitch(item.Major); background: @ColorSwitch(item.Major); opacity: 0.85; display: none;">
+                                <p>
+                                    <strong>Where:</strong> Room @Html.DisplayFor(modelItem => item.Room) <br>
+                                    <strong>When:</strong> @Html.DisplayFor(modelItem => item.Time) <br>
+                                    <strong>Dept:</strong> @majorConverter(item.Major) <br>
+                                    <strong>Advisor:</strong> @Html.DisplayFor(modelItem => item.Advisor) <br>
+                                    <strong>Sponsor:</strong> @Html.DisplayFor(modelItem => item.Sponsor) <br>
+                                </p>
+                                <h3>Students</h3>
+                                <ul>
+                                    <li>@Html.DisplayFor(modelItem => item.Student1)</li>
+                                    <li>@Html.DisplayFor(modelItem => item.Student2)</li>
+                                    @if (item.Student3 != "N/A")
+                                    {
+                                        <li>@Html.DisplayFor(modelItem => item.Student3)</li>
+                                    }
+                                    @if (item.Student4 != "N/A") {
+                                        <li>@Html.DisplayFor(modelItem => item.Student4)</li>
+                                    }
+                                </ul>
+                                <a asp-action="Details" asp-route-id="@item.Id">More Details</a>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+                
+            </table>
+        </div>
+
+        <!-- The animated text portion used for header parallax section -->
+        <script>
+
+            var presentationText = new Typed(".auto-type-presentations", {
+                strings: ["INSPIRE", "INNOVATE", "CREATE"],
+                typeSpeed: 100,
+                backSpeed: 100,
+                backDelay: 5000,
+                shuffle: false,
+                loop: true,
+                cursorChar: '_',
+            });
+
+        </script>
+
+        <!-- This controls the table row expansion -->
+        <script>
+            
+            $(".exploder").click(function () {
+
+                $(this).toggleClass("btn-success btn-danger");
+
+                $(this).children("span").toggleClass("glyphicon-plus glyphicon-minus");
+
+                $(this).closest("tr").next("tr").toggleClass("hide");
+
+                if ($(this).closest("tr").next("tr").hasClass("hide")) {
+                    $(this).closest("tr").next("tr").children("td").slideUp();
+                }
+                else {
+                    $(this).closest("tr").next("tr").children("td").slideDown(350);
+                }
+            });
+        </script>
+
+        <!-- This switch mapping allows each row to have a unique color based on the major/dept-->
+        @{
+            string ColorSwitch(string major)
+            {
+                string majorColor;
+                switch (major.ToLower())
+                {
+                    case "csse":
+                        majorColor = "#1e417b";
+                        break;
+                    case "ibe":
+                        majorColor = "#F2665E";
+                        break;
+                    case "met":
+                        majorColor = "#99CC00";
+                        break;
+                    case "ecet":
+                        majorColor = "#E98300";
+                        break;
+                    case "me":
+                        majorColor = "#FFD100";
+                        break;
+                    case "ece":
+                        majorColor = "#008755";
+                        break;
+                    case "ie":
+                        majorColor = "#000321";
+                        break;
+                    case "plet":
+                        majorColor = "#491D70";
+                        break;
+                    case "computer science and software engineering":
+                        majorColor = "#1e417b";
+                        break;
+                    case "interdisciplinary business with engineering studies":
+                        majorColor = "#F2665E";
+                        break;
+                    case "mechanical engineering technology":
+                        majorColor = "#99CC00";
+                        break;
+                    case "electrical and computer engineering technology":
+                        majorColor = "#E98300";
+                        break;
+                    case "mechanical engineering":
+                        majorColor = "#FFD100";
+                        break;
+                    case "electrical and computer engineering":
+                        majorColor = "#008755";
+                        break;
+                    case "industrial engineering":
+                        majorColor = "#000321";
+                        break;
+                    case "plastics engineering technology":
+                        majorColor = "#491D70";
+                        break;
+                    default:
+                        majorColor = "#1e417b";
+                        break;
+                }
+
+                return (majorColor);
+            }
+
+            // This converts the major/dept acronym to the full spelling
+            string majorConverter(string major)
+            {
+                string returnMajor;
+                switch (major.ToLower())
+                {
+                    case "csse":
+                        returnMajor = "Computer Science and Software Engineering";
+                        break;
+                    case "ibe":
+                        returnMajor = "Interdisciplinary Business with Engineering Studies";
+                        break;
+                    case "met":
+                        returnMajor = "Mechanical Engineering Technology";
+                        break;
+                    case "ecet":
+                        returnMajor = "Electrical and Computer Engineering Technology";
+                        break;
+                    case "me":
+                        returnMajor = "Mechanical Engineering";
+                        break;
+                    case "ece":
+                        returnMajor = "Electrical and Computer Engineering";
+                        break;
+                    case "ie":
+                        returnMajor = "Industrial Engineering";
+                        break;
+                    case "plet":
+                        returnMajor = "Plastics Engineering Technology";
+                        break;
+                    default:
+                        returnMajor = major;
+                        break;
+                }
+
+                return (returnMajor);
+            }
+
+            string TextColorSwitch(string major)
+            {
+                string majorColorText;
+                switch (major.ToLower())
+                {
+                    case "met":
+                        majorColorText = "#000000";
+                        break;
+                    case "me":
+                        majorColorText = "#000000";
+                        break;
+                    case "mechanical engineering technology":
+                        majorColorText = "#000000";
+                        break;
+                    case "mechanical engineering":
+                        majorColorText = "#000000";
+                        break;
+                    default:
+                        majorColorText = "white";
+                        break;
+                }
+
+                return (majorColorText);
+            }
+
+        }
+
+    </main>
+</body>
+</html>

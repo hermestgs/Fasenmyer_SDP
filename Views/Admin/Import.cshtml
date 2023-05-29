@@ -1,0 +1,208 @@
+﻿@model IEnumerable<FasenmyerConference.Models.Presentations>
+
+@{
+    ViewData["Title"] = "Import";
+}
+
+<h1>Database Management</h1>
+
+
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark mb-3 p-0 m-0" style="background-color: #001E44">
+@*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">*@
+
+    <div class="container-fluid">
+        <a class="navbar-brand" asp-area="" asp-controller="" asp-action=""></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="" asp-controller="Admin" asp-action="Index">Admin Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="" asp-controller="HomePages" asp-action="Index">Home Page Mgt</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="" asp-controller="Keynote_Speaker" asp-action="Index">Sponsor Mgt</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="" asp-controller="Spotlight_Sponsor" asp-action="Index">Keynote Mgt</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="" asp-controller="Schedules" asp-action="Index">Event Schedule Mgt</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="" asp-controller="Conference" asp-action="Index">Conference Info Mgt</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="" asp-controller="Presentations" asp-action="Create">Create New Presentation</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<h1>Search Presentations</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <form asp-controller="Admin" asp-action="Index" method="get">
+                    <p>
+                        Keyword: <input type="text" name="SearchString" />
+                        <input type="submit" value="Search" />
+                    </p>
+                </form>
+            </th>
+        </tr>
+
+        <tr>
+
+            <th>
+                <form asp-controller="Admin" asp-action="Index" method="get">
+                    <p>
+                        <input type="submit" value="Reset Search" />
+                    </p>
+                </form>
+            </th>
+        </tr>
+        <tr>
+
+            <th>
+                Scroll Down to Import Excel File
+            </th>
+        </tr>
+
+    </thead>
+
+</table>
+
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                        @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                        @Html.DisplayNameFor(model => model.PName)
+                </th>
+                <th>
+                        @Html.DisplayNameFor(model => model.Advisor)
+                </th>
+                <th>
+                        @Html.DisplayNameFor(model => model.Time)
+                </th>
+                <th>
+                        @Html.DisplayNameFor(model => model.Sponsor)
+                </th>
+                <th>
+                        @Html.DisplayNameFor(model => model.Student1)
+                </th>
+                <th>
+                        @Html.DisplayNameFor(model => model.Student2)
+                </th>
+                <th>
+                        @Html.DisplayNameFor(model => model.Student3)
+                </th>
+                <th>
+                        @Html.DisplayNameFor(model => model.Student4)
+                </th>
+                <th>
+                        @Html.DisplayNameFor(model => model.Major)
+                </th>
+                <th>
+                        @Html.DisplayNameFor(model => model.Room)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                            @Html.DisplayFor(modelItem => item.PName)
+                    </td>
+                    <td>
+                            @Html.DisplayFor(modelItem => item.Advisor)
+                    </td>
+                    <td>
+                            @Html.DisplayFor(modelItem => item.Time)
+                    </td>
+                    <td>
+                            @Html.DisplayFor(modelItem => item.Sponsor)
+                    </td>
+                    <td>
+                            @Html.DisplayFor(modelItem => item.Student1)
+                    </td>
+                    <td>
+                            @Html.DisplayFor(modelItem => item.Student2)
+                    </td>
+                    <td>
+                            @Html.DisplayFor(modelItem => item.Student3)
+                    </td>
+                    <td>
+                            @Html.DisplayFor(modelItem => item.Student4)
+                    </td>
+                    <td>
+                            @Html.DisplayFor(modelItem => item.Major)
+                    </td>
+                    <td>
+                            @Html.DisplayFor(modelItem => item.Room)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+                }
+        </tbody>
+    </table>
+
+
+@if (@ViewData["res"].ToString() == "extError")
+        {
+            <p> Import File Error! </p>
+            <p> Only upload Excel files with .xlsx extension. </p>
+
+    <div class="mb-3">
+        <form method="post" asp-controller="Admin" asp-action="Import" enctype="multipart/form-data">
+            <label style="font-size:22px; color:rgb(30,64,124); font-weight:400;" for="formFile" class="form-label">Import Presentations From Excel File</label>
+            <input style="padding-bottom:5px;" class="form-control" type="file" id="formFile" name="file">
+            <button class="btn btn-primary" type="submit">Import from Excel</button>
+        </form>
+    </div>
+        }
+        else if (@ViewData["res"].ToString() == "null"){
+            <p> No File Uploaded. </p>
+            <p> </p>
+   
+    <div class="mb-3">
+        <form method="post" asp-controller="Admin" asp-action="Import" enctype="multipart/form-data">
+            <label style="font-size:22px; color:rgb(30,64,124); font-weight:400;" for="formFile" class="form-label">Import Presentations From Excel File</label>
+            <input style ="padding-bottom:5px;" class="form-control" type="file" id="formFile" name="file">
+            <button class="btn btn-primary" type="submit">Import from Excel</button>
+        </form>
+    </div>
+        }
+        else
+        {
+
+    <div class="mb-3">
+        <form method="post" asp-controller="Admin" asp-action="Import" enctype="multipart/form-data">
+            <label style="font-size:22px; color:rgb(30,64,124); font-weight:400;" for="formFile" class="form-label">Import Presentations From Excel File</label>
+            <input style="padding-bottom:5px;" class="form-control" type="file" id="formFile" name="file">
+            <button class="btn btn-primary" type="submit">Import from Excel</button>
+        </form>
+    </div>
+        }
+

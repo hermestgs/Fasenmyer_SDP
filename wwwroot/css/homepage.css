@@ -1,0 +1,502 @@
+﻿body, html, main {
+    height: 100%;
+    font-family: 'Roboto';
+}
+
+/* Controls the styling for the top video playing, makes sure text is up front and video is full screen */
+.back-video {
+    position: absolute;
+    z-index: -1;
+    object-fit: cover;
+}
+
+/* Creates the header section where the logo and background video play */
+.section {
+    right: 0;
+    left: -12px;
+    top: -16px;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Handles logo styling at the top of the homepage video (hero video) */
+.section h1 {
+    text-align: center;
+    font-size: 10rem;
+    font-family: 'Roboto Condensed';
+    padding: 30px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    margin: 15px;
+    z-index: 1;
+    color: white;
+    font-weight: 900;
+    border: 20px solid #009CDE;
+    -webkit-text-stroke: 3px #009CDE;
+}
+
+/* Used for the text animation, ensures text doesn't auto changes rows */
+.section span {
+    display: inline-flex;
+}
+
+/* Allows an additional row due to the inline-flex for the text animation */
+.section break {
+    flex-basis: 100%;
+    height: 0;
+}
+
+/* The text animation/transition will only apply to even span text (that's why there are two divs in the top text) */
+.section span:nth-child(even) {
+    overflow: hidden;
+    transition: ease-in-out 0.5s;
+    letter-spacing: -1em;
+}
+
+/* Removes the negative spacing and displays the text normally */
+.section h1:hover span:nth-child(even) {
+    color: white;
+    -webkit-text-stroke: 0;
+    letter-spacing: 0;
+}
+
+/* Allows sections to bypass some of the size retrictions due to the global settings in site.css*/
+.container {
+    max-width: inherit;
+}
+
+/* Used for the section containing the parallax image*/
+.parallax {
+    display: flex;
+    position: sticky;
+    position: -webkit-sticky; /* Safari */
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    /* Set a specific height */
+    min-height: 500px;
+    left: 7px;
+    width: 100vw;
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: -1;
+}
+
+/* Used for styling for the auto typing portion */
+.typeText {
+    position: relative;
+    width: calc(100vw - 17px);
+    font-size: 15rem;
+    font-weight: 900;
+    font-family: 'Roboto Condensed';
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 450px;
+    opacity: .55;
+}
+
+/* The parallax section styling, used for mostly for controlling wide and making sure it stays under header/footer*/
+.parallax-sections {
+    margin: -19px;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* This will dictate the characteristics of top area of writing on home page*/
+.topPara {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    flex-direction: column;
+    font-family: Roboto;
+    margin: auto;
+    width: 700px;
+    padding: 50px;
+}
+
+/* The header-2 for the column based text sections */
+.topPara h2 {
+    font-weight: 900;
+    border: 20px solid #009CDE;
+    font-size: 50px;
+}
+
+/* Controls the font size for text portion text*/
+.topPara p {
+    font-size: 22px;
+}
+
+/* Allows row based display within the larger column display in topPara*/
+.sidePara {
+    width: 100vw;
+    padding: 50px;
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+}
+
+/* Used for image display for rows (image and text side-by-side) */
+.sideParaPhoto img {
+    height: 400px;
+    width: 300px;
+    border: 20px solid #009CDE;
+}
+
+.timer {
+    width: 100%;
+    padding: 0;
+    margin-bottom: -50px;
+    text-align: center;
+    align-items: center;
+}
+
+.timer h1 {
+    font-family: 'Roboto Condensed';
+    font-size: 7rem;
+    -webkit-text-stroke: 3px #009CDE;
+    color: #009CDE;
+    font-weight: 900;
+    margin-bottom: -10px;
+}
+
+.timer p {
+    font-family: 'Roboto';
+    font-size: 20px;
+    color: #009CDE;
+    text-align: match-parent;
+}
+
+/* For the intro hero movie at the top of the homepage aspect ratios, helps make them full wide screen */
+@media (min-aspect-ratio: 16/9) {
+    .back-video {
+        width: 100%;
+        height: auto;
+    }
+}
+
+/* Ditto for above, each one controls the max and min for wide screen display*/
+@media (max-aspect-ratio: 16/9) {
+    .back-video {
+        width: auto;
+        height: 100%;
+    }
+}
+
+/* Various resolutions for the homepage interactive expandable logo */
+@media (max-width: 1644px) {
+    .section h1 {
+        text-align: center;
+        font-size: 7rem;
+        font-family: 'Roboto Condensed';
+        padding: 30px;
+        padding-bottom: 0px;
+        padding-top: 0px;
+        margin: 15px;
+        z-index: 1;
+        color: white;
+        font-weight: 900;
+        border: 20px solid #009CDE;
+        -webkit-text-stroke: 3px #009CDE;
+    }
+
+}
+
+@media (max-width: 1195px) {
+    .section h1 {
+        text-align: center;
+        font-size: 6rem;
+        font-family: 'Roboto Condensed';
+        padding: 30px;
+        padding-bottom: 0px;
+        padding-top: 0px;
+        margin: 15px;
+        z-index: 1;
+        color: white;
+        font-weight: 900;
+        border: 20px solid #009CDE;
+        -webkit-text-stroke: 3px #009CDE;
+    }
+}
+
+@media (max-width: 1045px) {
+    .section h1 {
+        text-align: center;
+        font-size: 5rem;
+        font-family: 'Roboto Condensed';
+        padding: 30px;
+        padding-bottom: 0px;
+        padding-top: 0px;
+        margin: 15px;
+        z-index: 1;
+        color: white;
+        font-weight: 900;
+        border: 20px solid #009CDE;
+        -webkit-text-stroke: 3px #009CDE;
+    }
+}
+
+@media (max-width: 895px) {
+    .section h1 {
+        text-align: center;
+        font-size: 4rem;
+        font-family: 'Roboto Condensed';
+        padding: 30px;
+        padding-bottom: 0px;
+        padding-top: 0px;
+        margin: 15px;
+        z-index: 1;
+        color: white;
+        font-weight: 900;
+        border: 20px solid #009CDE;
+        -webkit-text-stroke: 3px #009CDE;
+    }
+}
+
+/* Same as above, but parameters modified for mobile devices */
+@media (max-width: 1000px) {
+
+    /* Global CSS */
+    html, body {
+        overflow-x: hidden;
+    }
+
+    /* Used for the top Penn State Bernard campus video (hero video) */
+    .section {
+        right: 0;
+        left: -12px;
+        top: -16px;
+        padding: 0;
+        margin: 0;
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+        .section h1 {
+            text-align: center;
+            font-size: 7rem;
+            font-family: 'Roboto Condensed';
+            padding: 30px;
+            padding-bottom: 0px;
+            padding-top: 0px;
+            margin: 15px;
+            z-index: 1;
+            color: white;
+            font-weight: 900;
+            border: 20px solid #009CDE;
+            -webkit-text-stroke: 3px #009CDE;
+        }
+
+        /* Used for the text animation, ensures text doesn't auto changes rows */
+        .section span {
+            display: inline-flex;
+        }
+
+        /* Allows an additional row due to the inline-flex for the text animation */
+        .section break {
+            flex-basis: 100%;
+            height: 0;
+        }
+
+        /* The text animation/transition will only apply to even span text (that's why there are two divs in the top text) */
+        .section h1:not(:active) span:nth-child(even) {
+            overflow: hidden;
+            transition: ease-in-out 0.5s;
+            letter-spacing: -1em;
+        }
+
+        /* Removes the negative spacing and displays the text normally */
+        .section h1:active span:nth-child(even) {
+            letter-spacing: 0;
+            font-size: 2rem;
+            -webkit-text-stroke: 0;
+        }
+
+        .section h1:active span {
+            padding: 0;
+            margin-right: -10px;
+            margin-left: -3px;
+            width: 50%;
+            word-wrap: break-word;
+        }
+
+    .back-video {
+        width: auto;
+        height: 100%;
+    }
+
+    /* Used for each section paragraph/section (between parallax sections) */
+    .topPara {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        flex-direction: column;
+        font-family: Roboto;
+        margin: 0px;
+        margin-top: 5px;
+        width: 100%;
+        padding: 25px;
+    }
+
+    /* For the Keynote speaker */
+    .sidePara {
+        width: 90vw;
+        padding: 5px;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    /* Keynote speaker photo */
+    .sideParaPhoto {
+        border: solid #009CDE;
+    }
+
+        .sideParaPhoto img {
+            height: 100%;
+            width: 100%;
+        }
+
+    .sponsorSection {
+        width: 100vw;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+
+        .sponsorSection img {
+            height: 100%;
+            width: 100%;
+        }
+
+    .parallax {
+        display: flex;
+        position: relative;
+        /* Set a specific height */
+        min-height: 500px;
+        width: 200vw;
+        /* Create the parallax scrolling effect */
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        z-index: -1;
+    }
+
+    .typeText {
+        position: relative;
+        width: 60%;
+        font-size: 5rem;
+        font-weight: 900;
+        font-family: 'Roboto Condensed';
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 450px;
+        opacity: .55;
+    }
+
+    .parallax-sections {
+        margin: -25px;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .container {
+        max-width: 100vw;
+    }
+
+    .timer {
+        width: 100%;
+        padding: 0;
+        margin-bottom: -25px;
+        text-align: center;
+        align-items: center;
+    }
+
+    .timer h1 {
+        font-family: 'Roboto Condensed';
+        font-size: 6rem;
+        -webkit-text-stroke: 3px #009CDE;
+        color: #009CDE;
+        font-weight: 900;
+        margin-bottom: -10px;
+    }
+
+    .timer p {
+        font-family: 'Roboto';
+        font-size: 14px;
+        color: #009CDE;
+        text-align: match-parent;
+    }
+}
+
+/* Made for extremely line mobile devices */
+@media (max-width: 280px) {
+    .timer {
+        width: 100%;
+        padding: 0;
+        margin-bottom: -25px;
+        text-align: center;
+        align-items: center;
+    }
+
+    .timer h1 {
+        font-family: 'Roboto Condensed';
+        font-size: 4rem;
+        -webkit-text-stroke: 3px #009CDE;
+        color: #009CDE;
+        font-weight: 900;
+        margin-bottom: -10px;
+    }
+
+    .timer p {
+        font-family: 'Roboto';
+        font-size: 14px;
+        color: #009CDE;
+        text-align: match-parent;
+    }
+
+}
+
+/* iPhone specific CSS */
+@supports (-webkit-touch-callout: none) {
+    .parallax {
+        display: flow;
+        position: static;
+        /* Set a specific height */
+        min-height: 500px;
+        width: 200vw;
+        /* Create the parallax scrolling effect */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        z-index: -1;
+    }
+
+    .parallax-sections {
+        position: relative;
+        margin: -25px;
+        padding: 0;
+        overflow: hidden;
+    }
+}

@@ -1,0 +1,142 @@
+html {
+    font-size: 14px;
+  }
+  
+  @media (min-width: 768px) {
+    html {
+      font-size: 16px;
+    }
+  }
+  
+  html {
+    position: relative;
+    min-height: 100%;
+  }
+  
+  body {
+    margin-bottom: 60px;
+    font-family: Roboto;
+  }
+  
+
+  
+  /*this is the grid area for the welcome text and burke pic*/
+  .grid-container {
+      display: grid;
+      grid-template-areas:
+          'burkePic'
+          'header';
+     
+      gap: 10px;
+      background-color: white;
+      padding: 5px;
+  }
+  
+  /*this is the styling for the div inside grid container*/
+      .grid-container > div {
+          background-color: rgba(255, 255, 255, 0.8);
+          text-align: left;
+          padding: 20px 0;
+          font-size: 30px;
+      }
+  
+  .item4 {
+      grid-area: burkePic;
+      font-size: 8px;
+      font-family: Roboto;
+      object-position:right;
+      text-align: right;
+      
+  }
+  
+  /*grid item for keynote text/intro*/
+  .keynoteIntro {
+      grid-area: intro;
+      font-size: 14px;
+      font-family:Roboto;
+  
+  }
+  
+  /* grid for contacts*/
+  .gridContacts {
+      display: grid;
+      grid-template-areas:
+          'contacts contacts contacts contacts contacts contacts'
+          'dean kelly kelly kelly kelly kelly ';
+      gap: 0px;
+      margin: 0;
+      border: 0;
+      outline: 0;
+      -webkit-text-size-adjust: 100%;
+      vertical-align: baseline;
+      padding: 0px;
+      background-color: rgb(4,30,66);
+      color: rgb(62,163,153);
+  }
+  
+  .contactHeader {
+      grid-area: contacts;
+      font-size: 14px;
+      font-family: Roboto;
+    
+  }
+  /* Dean contact info*/
+  .deanInfo {
+      grid-area: dean;
+      margin: 0;
+      padding-left: 10px;
+      padding: 0;
+      border: 0;
+      outline: 0;
+      gap: 0px;
+      -webkit-text-size-adjust: 100% ;
+      vertical-align: baseline;
+      font-size: 14px;
+      font-family: Roboto;
+  }
+  
+  /* grid item for keynote speaker pic*/
+  .keynotePic {
+      grid-area: photo;
+      font-size: 8px;
+      font-family: Roboto;
+      object-position: left;
+      text-align: left;
+  }
+  
+  
+  
+  /*grid container for featured sponsor*/
+  .grid-sponsor {
+      display: grid;
+      grid-template-areas:
+          'logo sponsor-intro ';
+      gap: 10px;
+      background-color: rgb(162,170,173);
+      padding: 5px;
+  }
+  
+  
+  /*grid item for feature sponsor text/intro*/
+  .sponsorIntro {
+      grid-area: sponsor-intro;
+      font-size: 14px;
+      font-family: Roboto;
+  }
+  
+  /* grid item for feature sponsor logo*/
+  .sponsorLogo {
+      grid-area: logo;
+      font-size: 8px;
+      font-family: Roboto;
+      object-position: center;
+      text-align: left;
+      padding-bottom: 30px;
+  }
+
+.centerPic {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}

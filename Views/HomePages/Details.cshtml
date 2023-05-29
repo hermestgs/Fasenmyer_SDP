@@ -1,0 +1,42 @@
+﻿@model FasenmyerConference.Models.HomePage
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>HomePage</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.WelcomeArea)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.WelcomeArea)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.KeynoteIntro)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.KeynoteIntro)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SpotlightIntro)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SpotlightIntro)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ContactInfo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ContactInfo)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

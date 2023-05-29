@@ -1,0 +1,89 @@
+﻿@model IEnumerable<FasenmyerConference.Models.Spotlight_Sponsor>
+
+@{
+    ViewData["Title"] = "Upload";
+}
+
+<div class="text-end">
+    <form asp-controller="Admin" asp-action="Index">
+        <input type="submit" value="Back to Admin Home" />
+    </form>
+</div>
+
+<h1>Manage Outstanding Sponsor</h1>
+
+<hr size="6" color="rgb(30,64,124)" />
+
+
+<p>
+    <a asp-action="Create">Insert New Spotlight Sponsor</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Sponsor_Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Details)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sponsor_Name)
+                </td>
+                <td>
+                    @Html.Raw(item.Details)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@if (@ViewData["res"].ToString() == "extError")
+{
+    <p style="font-size:24px; font-weight:300;"> Photo Upload Error! </p>
+    <p style="font-size:24px; font-weight:300;"> Upload a Photo of .jpg Format Only: </p>
+    <pref color="rgb(100, 0, 0)"/>
+
+    <div class="container">
+        <form method="post" asp-controller="Spotlight_Sponsor" asp-action="Upload" enctype="multipart/form-data">
+            <input type="file" name="file" />
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+}
+else if (@ViewData["res"].ToString() == "null")
+{
+    <p style="font-size:24px; font-weight:300;"> No Photo Uploaded </p>
+    <p style="font-size:24px; font-weight:300;"> Upload a Photo of .jpg Format Only: </p>
+    <div class="container">
+        <form method="post" asp-controller="Spotlight_Sponsor" asp-action="Upload" enctype="multipart/form-data">
+            <input type="file" name="file" />
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+}
+else
+{
+    <p style="font-size:24px; font-weight:300;"> Uploaded Photo: </p>
+    <div class="container">
+        <form method="post" asp-controller="Spotlight_Sponsor" asp-action="Upload" enctype="multipart/form-data">
+            <input type="file" name="file" />
+            <button type="submit">Upload</button>
+
+            <img src="@ViewData["FileLocation"]" width="300" height="300" />
+        </form>
+    </div>
+}

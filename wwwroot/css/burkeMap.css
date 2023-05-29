@@ -1,0 +1,138 @@
+﻿html, body {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+#map-id {
+    width: 100%;
+    position: relative;
+    height: calc(100vh - 125px);
+}
+
+.container {
+    max-width: inherit;
+}
+
+.introBold {
+    color: #009CDE;
+}
+
+.paraText {
+    font-size: 25px;
+    width: 100vw;
+}
+
+/* Used for the position and formating of the top title */
+.title {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    flex-direction: column;
+    font-family: Roboto;
+    margin: auto;
+    width: 700px;
+    padding: 50px;
+}
+
+/* The letter styling of the page title */
+.title h1 {
+    font-weight: 600;
+    border: 20px solid #009CDE;
+    font-size: 50px;
+    margin-top: -40px;
+    margin-bottom: 25px;
+}
+
+.PresentationStyle {
+    font-family: 'Roboto';
+}
+
+.PresentationStyle p {
+    font-family: 'Roboto Condensed';
+    font-size: 13px;
+    margin-bottom: -5px;
+}
+
+.PresentationStyle b {
+    font-size: 15px;
+    font-weight: 900;
+    padding: 7px 15px;
+    margin: 5px;
+}
+
+.PresentationStyle button {
+    background-color: #001E44;
+    border: none;
+    color: white;
+    font-size: 15px;
+    padding: 3px 10px;
+    margin: 2px;
+    border-radius: 4px;
+    outline: none;
+}
+
+.popupStyle {
+    font-family: 'Roboto';
+    font-size: 2rem;
+    font-weight: 900;
+}
+
+.popupStyle h2 {
+    font-family: 'Roboto Condensed';
+    align-items: center;
+    text-align: center;
+    font-weight: 900;
+    font-size: 30px;
+    padding-bottom: 0px;
+    margin: 0px;
+}
+
+.popupStyle button {
+    background-color: #001E44;
+    border: none;
+    color: white;
+    font-size: 15px;
+    padding: 7px 15px;
+    margin: 5px;
+    border-radius: 4px;
+    outline: none;
+}
+
+@media (max-width: 900px) {
+    /* Global CSS */
+    html, body {
+        overflow-x: hidden;
+    }
+
+    .title {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        flex-direction: column;
+        font-family: Roboto;
+        margin: auto;
+        width: 100%;
+        padding: 50px;
+    }
+
+    /* The letter styling of the page title */
+    .title h1 {
+        font-weight: 600;
+        border: 20px solid #009CDE;
+        font-size: 50px;
+        margin-top: -40px;
+        margin-bottom: 25px;
+    }
+
+    .container {
+        width: 100%;
+    }
+
+    .paraText {
+        width: 100%;
+    }
+}

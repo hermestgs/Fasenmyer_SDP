@@ -1,0 +1,61 @@
+﻿@model IEnumerable<FasenmyerConference.Models.Keynote_Speaker>
+
+@{
+    ViewData["Title"] = "Keynote Speaker";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <!-- Used for importing values and setting up environment -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="~/css/keynote.css" asp-append-version="true" />
+
+    </head>
+
+    <body>
+    <main>
+
+        <section>
+            <div class="topPara">
+
+                <h2>
+                    <!-- Section header -->
+                    <strong>Fasenmyer Engineering Design Conference Keynote Speaker</strong>
+                </h2>
+
+                <!-- General intro paragraph -->
+                <div>
+                    <p>
+                        Our <b style="color: #009CDE;">Keynote speaker</b> exemplifies the Fasenmyer Engineering Design Conference's<br />
+                        guiding philosophy to <b style="color: #009CDE;">Inspire, Innovate</b> and <b style="color: #009CDE;">Create</b>.
+                    </p>
+                </div>
+
+                 <!-- Keynote speaker section -->
+                <div class="sidePara">
+                    <div class="sideParaPhoto">
+                        <!-- Keynote Speaker image -->
+                        <img src="~/Upload/Images/KPic.jpg" width="250" height="300" />
+                    </div>
+
+                    <div style="padding: 30px;">
+                        <p>
+                            <!-- Keynote text taken from database or TinyMCE -->
+                            @foreach (var item in Model)
+                            {
+                                @Html.Raw(item.Bio)
+                            }
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>

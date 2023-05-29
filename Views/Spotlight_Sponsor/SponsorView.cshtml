@@ -1,0 +1,98 @@
+﻿@model IEnumerable<FasenmyerConference.Models.Spotlight_Sponsor>
+
+@{
+    ViewData["Title"] = "Sponsor";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Used for importing values and setting up environment -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/sponsor.css" asp-append-version="true" />
+
+</head>
+
+<body>
+
+<main>
+
+    <section>
+        <!-- Aligns everything in a column grid -->
+        <div class="topPara">
+
+            <!-- Title text -->
+                <h1 class="header">Fasenmyer Engineering Design Conference Outstanding Sponsor</h1>
+
+            <!-- General sponsor intro text -->
+            <div>
+                <p class="typeText">
+                        With our <b style="color: #009CDE;">sponsor's contributions</b>, we are able to mold the next generation of engineering leadership <br />
+                    who will endeavor to <b style="color: #009CDE;">Inspire, Innovate</b> and <b style="color: #009CDE;">Create</b>.
+                </p>
+            </div>
+
+            @*
+            <!-- Sponsor logo  and image captioning -->
+            <div>
+                <figure>
+                        <img style=" border: 5px outset #009CDE;" class="img-fluid"
+                            src="~/uploadedfiles/images/sponsorbuilding.jpg" />
+                    <figcaption style="font-size:10px;">From American Finishing USA Facebook</figcaption>
+                </figure>
+                </div>*@
+
+            <div class="sidePara">
+                <div class="sideParaPhoto">
+                    <!-- Spotlight Sponsor image -->
+                    <img src="~/Upload/Images/SPic.jpg" width="300" height="300" />
+                </div>
+
+                <div style="padding: 30px;">
+                    <p>
+                            <!-- Sponsor text pulled from database -->
+                            
+                                
+                                    @foreach (var item in Model)
+                                    {
+                                        @Html.Raw(item.Details)
+                                    }
+                               
+                            
+                    </p>
+                </div>
+
+
+            </div>
+
+            
+
+            @*
+            <!-- Sponsor image and website/resource link -->
+            <div style="text-align:center;">
+                <a href="https://www.afusa.net/">
+                    <img src="~/Upload/Images/SPic.jpg" width="125" height="125" alt="American Finishing" />
+                </a>
+                </div>*@
+
+            <!-- Sponsor name and address -->
+            <!-- Not editable, moving to database/Keynote mgr-->
+            @*<div>
+                <p style="text-align:center; font-size:22px; color:rgb(30,64,124);">
+                    Advanced Finishing USA <br />
+                    7401 Klier Drive<br />
+                    Fairview, PA 16415 <br />
+                    Phone: 814-474-5200
+                </p>
+                </div>*@
+
+        </div>
+
+    </section>
+
+    </main>
+
+</body>
+</html>

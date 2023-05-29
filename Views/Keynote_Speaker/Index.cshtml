@@ -1,0 +1,66 @@
+﻿@model IEnumerable<FasenmyerConference.Models.Keynote_Speaker>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="text-end">
+    <form asp-controller="Admin" asp-action="Index">
+        <input type="submit" value="Back to Admin Home" />
+    </form>
+</div>
+
+
+<h1>Manage Key Note Speaker</h1>
+@*
+    Shouldn't be creating any new record, admin should only edit previous ones.
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>*@
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.KName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bio)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.KName)
+                </td>
+                <td>
+                    @Html.Raw(item.Bio)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
+                    @*<a asp-controller="Admin" asp-action="Index">Back to Admin Home</a>*@
+                    
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<p style="font-size:24px; font-weight:300;"> Upload a Photo of .jpg Format Only: </p>
+
+<div class="container">
+    <form method="post" asp-controller="Keynote_Speaker" asp-action="Upload" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <button type="submit">Upload</button>
+    </form>
+</div>
+
+@*<img src="@ViewData["FileLocation"]" width="600" height="400" /> *@
+<img src="~/Upload/Images/KPic.jpg" width="250" height="300" />

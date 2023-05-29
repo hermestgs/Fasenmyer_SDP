@@ -1,0 +1,300 @@
+﻿body, html, main {
+    height: 100%;
+    font-family: 'Roboto';
+}
+
+/* Used for the position and formating of the top title */
+.title {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    flex-direction: column;
+    font-family: Roboto;
+    margin: auto;
+    width: 700px;
+    padding: 50px;
+}
+
+/* The letter styling of the page title */
+.title h1 {
+    font-weight: 600;
+    border: 20px solid #009CDE;
+    font-size: 50px;
+    margin-top: -40px;
+    margin-bottom: 25px;
+}
+
+/* Search Bar */
+.bar {
+    margin: 0 auto;
+    margin-top: 25px;
+    width: 575px;
+    border-radius: 30px;
+    border: 1px solid #dcdcdc;
+}
+
+.bar:hover {
+    box-shadow: 1px 1px 8px 1px #dcdcdc;
+}
+
+.bar:focus-within {
+    box-shadow: 1px 1px 8px 1px #dcdcdc;
+    outline: none;
+}
+
+.searchbar {
+    height: 45px;
+    border: none;
+    width: 500px;
+    font-size: 16px;
+    outline: none;
+}
+
+/* Mini Penn State button */
+.miniButton {
+    position: relative;
+    border: none;
+    background: none;
+}
+
+.miniButton img {
+    height: 20px;
+    top: 5px;
+    right: 10px;
+    padding: 0;
+}
+
+.buttons {
+    margin-top: 30px;
+}
+
+.button {
+    background-color: #001E44;
+    border: none;
+    color: white;
+    font-size: 15px;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 4px;
+    outline: none;
+}
+
+.button:hover {
+    border: 1px solid #009CDE;
+    padding: 9px 19px;
+    color: #009CDE;
+}
+
+.button:focus {
+    border: 1px solid #009CDE;
+    padding: 9px 19px;
+}
+
+.introBold {
+    color: #009CDE;
+}
+
+.paraText {
+    font-size: 25px;
+    padding-top: 150px;
+    width: 100vw;
+}
+
+/* Table */
+table {
+    width: 100%;
+}
+
+tr, td {
+    font-size: 20px;
+    font-weight: 800;
+}
+
+th {
+    font-weight: 900;
+    font-family: 'Roboto Condensed';
+    font-size: 2rem;
+    color: black;
+
+}
+
+.presentationData p {
+    font-weight: 500;
+}
+
+.presentationData h3 {
+    margin-bottom: 10px;
+    border-bottom: 1px solid white;
+    width: 10%;
+}
+
+/* Used for the parallax image */
+.parallax {
+    display: flex;
+    position: relative;
+    margin-bottom: -100px;
+    padding: 50px;
+    /* Set a specific height */
+    min-height: 500px;
+    width: 100vw;
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: -1;
+}
+
+/* Used for styling for javascript auto typing section */
+.typeText {
+    position: relative;
+    width: 100%;
+    font-size: 8rem;
+    font-weight: 900;
+    font-family: 'Roboto Condensed';
+    color: #001E44;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: -100px;
+    opacity: .9;
+    z-index: 1;
+}
+
+/* Making the table mobile friendly */
+@media (max-width: 900px) {
+    /* Global CSS */
+    html, body {
+        overflow-x: hidden;
+    }
+
+    table {
+        width: 100vw;
+    }
+
+    tr, td {
+        width: 100vw;
+        font-size: 15px;
+        font-weight: 800;
+
+    }
+
+    th {
+        font-weight: 900;
+        font-family: 'Roboto Condensed';
+        font-size: 2rem;
+        color: black;
+        border-collapse: collapse;
+        border: 1px solid #000000;
+    }
+
+
+    .bar {
+        margin: 0 auto;
+        margin-top: 25px;
+        width: 95vw;
+        border-radius: 30px;
+        border: 1px solid #dcdcdc;
+    }
+
+    .searchbar {
+        height: 45px;
+        border: none;
+        width: 80%;
+        font-size: 12px;
+        outline: none;
+    }
+
+    .title {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        flex-direction: column;
+        font-family: Roboto;
+        margin: auto;
+        width: 100%;
+        padding: 50px;
+    }
+
+    /* The letter styling of the page title */
+    .title h1 {
+        font-weight: 600;
+        border: 20px solid #009CDE;
+        font-size: 50px;
+        margin-top: -40px;
+        margin-bottom: 25px;
+    }
+
+    .parallax {
+        display: flex;
+        position: relative;
+        /* Set a specific height */
+        min-height: 500px;
+        width: 100vw;
+        /* Create the parallax scrolling effect */
+        background-attachment: fixed;
+        background-position: right;
+        background-repeat: no-repeat;
+        background-size: cover;
+        z-index: -1;
+    }
+
+    /* Prevents parallax wiggle bug */
+    .parallax span {
+        height: 100%;
+    }
+
+    .typeText {
+        position: relative;
+        width: 100%;
+        font-size: 5rem;
+        font-weight: 900;
+        font-family: 'Roboto Condensed';
+        color: #009CDE;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 450px;
+        opacity: .8;
+    }
+
+    .parallax-sections {
+        margin: -25px;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    /* Used for the text animation, ensures text doesn't auto changes rows */
+    .section span {
+        display: inline-flex;
+    }
+
+    .container {
+        width: 100%;
+    }
+
+}
+
+@supports (-webkit-touch-callout: none) {
+    .parallax {
+        display: flow;
+        position: static;
+        /* Set a specific height */
+        min-height: 500px;
+        width: 200vw;
+        /* Create the parallax scrolling effect */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        z-index: -1;
+    }
+
+    .parallax-sections {
+        position: relative;
+        margin: -25px;
+        padding: 0;
+        overflow: hidden;
+    }
+}

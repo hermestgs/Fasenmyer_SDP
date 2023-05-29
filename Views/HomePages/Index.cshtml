@@ -1,0 +1,62 @@
+﻿@model IEnumerable<FasenmyerConference.Models.HomePage>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="text-end">
+    <form asp-controller="Admin" asp-action="Index">
+        <input type="submit" value="Back to Admin Home" />
+    </form>
+</div>
+
+<h1>Manage Home Page Content</h1>
+
+@* Shouldn't be creating any new record, admin should only edit previous ones.
+<p>
+    <a asp-action="Create">Create New</a>
+</p>*@
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.WelcomeArea)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.KeynoteIntro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SpotlightIntro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContactInfo)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                 @Html.Raw(item.WelcomeArea)
+            </td>
+            <td>
+                @Html.Raw(item.KeynoteIntro)
+            </td>
+            <td>
+                @Html.Raw(item.SpotlightIntro)
+            </td>
+
+               <td>
+                    @Html.Raw(item.ContactInfo)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>|
+                    @*<a asp-controller="Admin" asp-action="Index">Back to Admin Home</a>*@
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

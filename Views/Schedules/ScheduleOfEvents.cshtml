@@ -1,0 +1,69 @@
+﻿@model IEnumerable<FasenmyerConference.Models.Schedule>
+
+@{
+    ViewData["Title"] = "Schedule Of Events";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Used for importing values and setting up environment -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="~/css/soe.css" asp-append-version="true" />
+
+</head>
+
+<body>
+
+    <!-- The page title in and intro-->
+    <header class="title">
+        <h1>Fasenmyer Conference Schedule Of Events</h1>
+        <p class="paraText">
+            The <b class="introBold">Schedule of Events</b> shows the itinerary for this years conference.<br />
+            Come and celebrate the achievements of the <b>next generation of engineers, leaders and thinkers</b> as they<br />
+            <b class="introBold">stride forward and be bold </b> into the future.
+        </p>
+    </header>
+
+    <!-- The table containing the general schedule of events for the conference -->
+    <main>
+    <table class="table" >
+        <!-- The head of the table -->
+        <thead style="background: #001E44;">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Time)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Event)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Location)
+                </th>
+            </tr>
+        </thead>
+
+        <!-- The body of the content of the table -->
+        <tbody>
+        @foreach (var item in Model) {
+                <tr style="background: #009CDE;">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Time)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Event)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Location)
+                    </td>
+                </tr>
+        }
+            </tbody>
+        </table>
+
+    </main>
+</body>
+</html>

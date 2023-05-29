@@ -1,0 +1,292 @@
+﻿@model IEnumerable<FasenmyerConference.Models.HomePage>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+@*@model IEnumerable<FasenmyerConference.Models.Schedule>*@
+
+@{
+    ///// IMPORTANT ////
+    // Pulls the date from the database
+    //var conferencedate = "Apr 29, 2023 07:30:00";
+    var conferencedate = @ViewData["ConferenceDate"];
+    DateTime FEDC_Countdown = DateTime.Parse(conferencedate.ToString());
+}
+<!-- This transfers the conference date to the Javascript program counterdown timer -->
+<input type="hidden" id="conferenceTimer" value="@conferencedate" />
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <!-- Used for importing values and setting up environment -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- Used for the animated typing portions in the parallax images of students -->
+        <!-- For more info: https://github.com/mattboldt/typed.js/ -->
+        <script src="https://unpkg.com/typed.js@2.0.14/dist/typed.umd.js"></script>
+        <link rel="stylesheet" href="~/css/homepage.css" asp-append-version="true" />
+
+    </head>
+
+    <body>
+
+    <!-- Creates the top video (a hero) and the interactive logo -->
+    <header>
+        <section>
+        <div class="m-0 p-0 section">
+                <h1>
+                    <!-- &nbsp generates a space -->
+                    <span>F</span><span>asenmyer&nbsp</span><span>E</span><span>ngineering</span>
+                    <!-- These divs allow for second row for inline-flex, there are two to keep it even for the transition animation -->
+                    <div class="break"></div>
+                    <div class="break"></div>
+                    <span>D</span><span>esign&nbsp</span><span>C</span><span>onference</span>
+
+                </h1>
+            <!-- Background video of campus -->
+            <video autoplay loop muted plays-inline playsinline class="m-0 p-0 back-video">
+                    <source src="~/uploadedfiles/Videos/PennStateBehrend.mp4" type="video/mp4" />
+            </video>
+        </div>
+        </section>
+
+    </header>
+
+    <!-- The top intro portion of text -->
+    <main>
+        <section>
+            <!-- Countdown timer -->
+            @{
+                // If the conference date is greater than current date
+                // the timer will show. If the current date is greater
+                // then conference date, then the countdown timer won't show
+                if (FEDC_Countdown > DateTime.Now)
+                {
+                // Pulls the countdown clock from JavaScript
+                <div class="timer">
+                    <h1 id="totalTime"></h1>
+                    <script src="~/js/timer.js"></script>
+                        <p>Day(s):Hour(s):Minutes(s):Seconds(s) <b>until FEDC @FEDC_Countdown.Year</b></p>
+                </div>
+                }
+            }
+            <!-- The welcome area for the conference -->
+            <div class="topPara">
+
+                <h2>Fasenmyer Engineering<br/>Design Conference</h2>
+                <p>
+                    
+                    @foreach (var item in Model)
+                    {
+                        @Html.Raw(item.WelcomeArea)
+                    }
+                    <a href="https://sites.psu.edu/behrendseniordesign/">Checkout previous years FEDC projects and award winners</a>
+
+                </p>
+            </div>
+        </section>
+
+        <!-- The first parallax image -->
+        <section class="parallax-sections">
+            <div class="parallax" style="background-image: url(../UploadedFiles/Images/StudentsFallDetailsandPortraits-32.png)">
+                <!-- This is used for the animated JavaScript text -->
+                <h1 class="typeText">.<span class="auto-type-inspire"></span></h1>
+            </div>
+        </section>
+
+        <!-- The Keynote Speaker section -->
+        <section>
+            <div class="topPara">
+                
+                <h2>
+                    <!-- Section header: Grabs current year -->
+                    <strong>@DateTime.Now.Year<br/>Keynote Speaker</strong>
+                </h2>
+                <div class="sidePara">
+                    <div class="sideParaPhoto">
+                        <!-- Keynote Speaker image -->
+                        <img src="~/Upload/Images/KPic.jpg" />
+                    </div>
+
+                    <div style="padding: 30px;">
+                        <p>
+                            <!-- Keynote name and title -->
+                            <h3>
+                                Matt Macbeth ’96<br/>
+                                Founder, the Billion Dollar BHAG Movement
+                            </h3>
+                            <!-- Keynote text taken from database or TinyMCE -->
+                            @foreach (var item in Model)
+                            {
+                                @Html.Raw(item.KeynoteIntro)
+
+                            }
+                            <a asp-controller="Keynote_Speaker" asp-action="KeynoteBio"> Read More </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Second parallax section -->
+        <section class="parallax-sections">
+            <div class="parallax" style="background-image: url(../UploadedFiles/Images/FermentationLab2021-13.png)" \>
+                <h1 class="typeText">.<span class="auto-type-innovate"></span></h1>
+            </div>
+        </section>
+
+        <!-- The Sponsor spotlight -->
+        <section>
+            <div class="topPara">
+                <h2>
+                    <!-- Section header -->
+                    <strong>@DateTime.Now.Year Outstanding Sponsor</strong>
+                </h2>
+                <div class="sponsorSection">
+                    <div>
+                        <!-- Sponsor image -->
+                        @*<img src="../UploadedFiles/Images/sponsor-4.png" width="600" height="600" />*@
+                        <img src="/Upload/Images/SPic.jpg" width="600" height="600" />
+                    </div>
+                    
+                    <div>
+                        <!-- Sponsor title -->
+                        <h3>Advanced Finishing USA</h3>
+                        <p>
+                            <!-- Sponsor text -->
+                            @*Advanced Finishing has successfully offered high quality wood grain powder coating, 
+                            epoxy & polyester powder coating, wet paint finishing, 
+                            along with many of their other value added services for over 50 years.*@
+                            @foreach (var item in Model)
+                            {
+                                @Html.Raw(item.SpotlightIntro)
+                            }
+                            <a asp-controller="Spotlight_Sponsor" asp-action="SponsorView"> Read More </a>
+
+                            @*Will have to delete since admin can't update the hyperlinks...*@
+                            @*
+                            The Fasenmyer Design Conference and PSU Behrend are excited to highlight this
+                            year's feature sponsor,
+                            <a href="https://www.afusa.net/"> Advanced Finishing USA</a>. Visit our spotlight sponsor page
+                            <a asp-controller="Spotlight_Sponsor" asp-action="SponsorView"> here</a> for more info.*@
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Last parallax image -->
+        <section class="parallax-sections">
+            <div class="parallax" style="background-image: url(../UploadedFiles/Images/InventPennStateEdited-13.jpg);">
+                <h1 class="typeText">.<span class="auto-type-create"></span></h1>
+            </div>
+        </section>
+
+        <!-- JavaScript section that creates animated typing text -->
+        <script>
+
+            var iosPlatforms = ['iPhone', 'iPad', 'iPod'];
+            var userAgent = window.navigator.userAgent;
+            var platform = window.navigator?.userAgentData?.platform || window.navigator.platform;
+
+            // Creates empty object to bing animated typing
+            var inspireTest;
+            // Looks for these classes and the html it's attached to
+            const typingTexts = document.querySelectorAll(".auto-type-inspire, .auto-type-innovate, .auto-type-create");
+
+            // Detecting if the device is an iPhone or not
+            if (iosPlatforms.indexOf(platform) === -1) {
+
+                // This loops and looks if any of those html elements are on screen
+                // If they are, it actives the typing animation
+                const observer = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        // Checks if the view is intersecting with the objects in the list above
+                        // If so, it checks when section it's and actives
+                        if ((entry.isIntersecting) && (entry.target.className === "auto-type-inspire")) {
+                            inspireTest = new Typed(".auto-type-inspire", {
+                                strings: ["INSPIRE"],
+                                typeSpeed: 80,
+                                cursorChar: '_',
+                            });
+                            observer.unobserve(entry.target);
+                        } else if ((entry.isIntersecting) && (entry.target.className === "auto-type-innovate")) {
+                            inspireTest = new Typed(".auto-type-innovate", {
+                                strings: ["INNOVATE"],
+                                typeSpeed: 120,
+                                cursorChar: '_',
+                            });
+                            observer.unobserve(entry.target);
+                        } else if ((entry.isIntersecting) && (entry.target.className === "auto-type-create")) {
+                            inspireTest = new Typed(".auto-type-create", {
+                                strings: ["CREATE"],
+                                typeSpeed: 120,
+                                cursorChar: '_',
+                            });
+                            observer.unobserve(entry.target);
+                        }
+
+                    })
+                },
+                    {
+                        // What percentage does the element need to be on screen to active
+                        // 1 means fully on screen, this helps with performance - due to lazy loading
+                        threshold: 1,
+                    }
+                )
+
+                // Iterates over visible elements in fetch list and presents them
+                typingTexts.forEach(text => {
+                    observer.observe(text)
+                })
+            } else {
+                // This loops and looks if any of those html elements are on screen
+                // If they are, it actives the typing animation
+                const observer = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        // Checks if the view is intersecting with the objects in the list above
+                        // If so, it checks when section it's and actives
+                        if ((entry.isIntersecting) && (entry.target.className === "auto-type-inspire")) {
+                            inspireTest = new Typed(".auto-type-inspire", {
+                                strings: ["INSPIRE"],
+                                typeSpeed: 1,
+                                cursorChar: '_',
+                            });
+                            observer.unobserve(entry.target);
+                        } else if ((entry.isIntersecting) && (entry.target.className === "auto-type-innovate")) {
+                            inspireTest = new Typed(".auto-type-innovate", {
+                                strings: ["INNOVATE"],
+                                typeSpeed: 1,
+                                cursorChar: '_',
+                            });
+                            observer.unobserve(entry.target);
+                        } else if ((entry.isIntersecting) && (entry.target.className === "auto-type-create")) {
+                            inspireTest = new Typed(".auto-type-create", {
+                                strings: ["CREATE"],
+                                typeSpeed: 1,
+                                cursorChar: '_',
+                            });
+                            observer.unobserve(entry.target);
+                        }
+
+                    })
+                },
+                    {
+                        // What percentage does the element need to be on screen to active
+                        // 1 means fully on screen, this helps with performance - due to lazy loading
+                        threshold: .01,
+                    }
+                )
+
+                // Iterates over visible elements in fetch list and presents them
+                typingTexts.forEach(text => {
+                    observer.observe(text)
+                })
+            }
+        </script>
+    
+    </main>
+    </body>
+</html>

@@ -1,0 +1,601 @@
+﻿@{
+    ViewData["Title"] = "Burke Map";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Indoor Maps App</title>
+
+    <link rel="stylesheet" href="https://us.atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.css" type="text/css" />
+    <link rel="stylesheet" href="https://us.atlas.microsoft.com/sdk/javascript/indoor/0.1/atlas-indoor.min.css" type="text/css" />
+
+    <script src="https://us.atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.js"></script>
+    <script src="https://us.atlas.microsoft.com/sdk/javascript/indoor/0.1/atlas-indoor.min.js"></script>
+
+    <!-- Load in the JavaScript and CSS files for the map legend. -->
+    <link rel="stylesheet" href="~/css/azure-maps-layer-legend.min.css" type="text/css" />
+    <script src="~/js/azure-maps-layer-legend.min.js"></script>
+
+    <!-- Geolocation control module for indoor tracking -->
+    <script src="~/js/azure-maps-geolocation-control.min.js"></script>
+
+    <!-- Loading CSS -->
+    <link rel="stylesheet" href="~/css/burkeMap.css" asp-append-version="true" />
+
+</head>
+
+<body>
+
+    <header class="title">
+        <h1>Interactive Burke Map</h1>
+        <p class="paraText">
+            The <b class="introBold">Interactive Burke Map</b> allows you to see a complete map of the beautiful <b>Burke Center</b>.<br />
+            <b>
+                You can select floor levels, rooms will change color when presentations are occuring, you can select the active presentation rooms for more capstone details,<br />
+                track your location in the building and select any two locations (To, From) and receive indoor navigation directions.</b><br />
+            The Burke Center is the heart of the School of Engineering, and where students first learn to <b class="introBold">Inspire, Innovate</b> and <b class="introBold">Create</b>.<br />
+            <b>Come explore.</b>
+        </p>
+
+    </header>
+
+    <main>
+    <!-- The Div that contains the Azure map -->
+    <div class="container" id="map-id"></div>
+
+    <!-- JavaScript section that draws, interacts and manages the map -->
+    <script>
+        // Used for indoor navigation
+        var routeActive = false;
+        var currentFloor = 0;
+        currentLatLong = {
+            lat: 0,
+            long: 0
+        };
+        var fromDir =
+        {
+            floor: null,
+            lat: null,
+            long: null
+        };
+        var toDir =
+        {
+            floor: null,
+            lat: null,
+            long: null
+        };
+
+        // Pulls data from config file and controller
+        const subscriptionKey = '@ViewData["AzureSubscriptionKey"]';
+        const tilesetId = '@ViewData["tilesetId"]';
+        const statesetId = '@ViewData["statesetId"]';
+        const routeID = "ee49e42f-aeab-f9aa-04ab-261cd5dfe62a";
+        
+        // Grabs the object containing presentation info
+        var result = @Html.Raw(ViewData["serializedJSON"]);
+
+        // Used for testing - CKC
+        //console.log(result);
+
+        // Used for testing - CKC
+        //for (var i = 0; i < result.length; i++) {
+        //    console.log(result[i].Room);
+        //};
+
+        const map = new atlas.Map("map-id", {
+            // use your facility's location - lat, long
+            center: [-79.98000450, 42.118800],
+            // or, you can use bounds: [# west, # south, # east, # north] and replace # with your Map bounds
+            style: "road",
+            view: 'Auto',
+            authOptions: {
+                authType: 'subscriptionKey',
+                subscriptionKey: subscriptionKey
+            },
+            zoom: 18,
+        });
+
+        // Used for the map legend
+        var legend;
+        var categoryLegend = {
+            type: 'category',
+            items: [
+                {
+                    color: '#1e417b',
+                    label: 'Computer Science and Software Engineering (CSSE)',
+                    shape: 'square'
+                }, {
+                    color: '#F2665E',
+                    label: 'Interdisciplinary Business with Engineering studies (IBE)',
+                    shape: 'square'
+                }, {
+                    color: '#99CC00',
+                    label: 'Mechanical Engineering Technology (MET)',
+                    shape: 'square'
+                }, {
+                    color: '#E98300',
+                    label: 'Electrical and Computer Engineering Technology (ECET)',
+                    shape: 'square'
+                }, {
+                    color: '#FFD100',
+                    label: 'Mechanical Engineering (ME)',
+                    shape: 'square'
+                }, {
+                    color: '#008755',
+                    label: 'Electrical and Computer Engineering (ECE)',
+                    shape: 'square'
+                }, {
+                    color: '#000321',
+                    label: 'Industrial Engineering (IE)',
+                    shape: 'square'
+                }, {
+                    color: '#491D70',
+                    label: 'Plastics Engineering Technology (PLET)',
+                    shape: 'square'
+                }
+            ]
+        };
+
+        map.events.add('ready', function () {
+            //Pass multiple controls into the map using an array.
+            map.controls.add([
+                new atlas.control.ZoomControl(),
+                new atlas.control.CompassControl(),
+                new atlas.control.PitchControl(),
+            ], {
+                position: "top-left"
+            });
+
+            // Section creates, styles and places the map legend
+            legend = new atlas.control.LegendControl({
+                legends: [categoryLegend],
+                style: "#314D64",
+            });
+
+            map.controls.add(legend, {
+                position: 'bottom-left'
+            });
+
+            // Used for the different map layers
+            map.controls.add(new atlas.control.StyleControl({
+                mapStyles: ['road', 'grayscale_dark', 'night', 'road_shaded_relief', 'satellite', 'satellite_road_labels', 'blank']
+            }), {
+                position: 'top-left'
+            });
+
+            // Indoor floow level controller and position on screen
+            const levelControl = new atlas.control.LevelControl({
+                position: "top-right",
+            });
+
+            const indoorManager = new atlas.indoor.IndoorManager(map, {
+                levelControl, //level picker
+                tilesetId,
+                statesetId: statesetId
+            });
+
+            // If the stateID is filled out, then the rooms can change colors and state
+            if (statesetId.length > 0) {
+                indoorManager.setDynamicStyling(true);
+            }
+
+            map.events.add("levelchanged", indoorManager, (eventData) => {
+                //put code that runs after a level has been changed
+                console.log("The level has changed:", eventData);
+                currentFloor = --eventData.levelNumber;
+                floorVis();
+            });
+
+            map.events.add("facilitychanged", indoorManager, (eventData) => {
+                //put code that runs after a facility has been changed
+                console.log("The facility has changed:", eventData);
+                currentFloor = --eventData.levelNumber;
+                floorVis();
+            });
+
+            // The toggle for the indoor map legend
+            map.events.add('toggled', legend, function (e) {
+                console.log('Minified ' + e.minimized);
+            });
+
+            // The toggle for the indoor map legend
+            map.events.add('toggled', legend, function (e) {
+                console.log('Minified ' + e.minimized);
+            });
+
+            // Used for presentation info pop-up when the presentation is active
+            popup = new atlas.Popup({
+                pixelOffset: [0, -18],
+                fillColor: 'rgba(150,190,230,0.95)',
+                closeButton: true
+            });
+
+            map.controls.add([
+                //Add the geolocation control to the map.
+                new atlas.control.GeolocationControl({
+                    style: 'auto',
+                    showUserLocation: true,
+                    trackUserLocation: true,
+                    updateMapCamera: true,
+                    markerColor: '#009CDE',
+                })
+            ], {
+                position: 'top-right'
+            });
+
+            // Creates a drawing layers for each floor, this is what creates the direction lines
+            datasourceOne = new atlas.source.DataSource();
+            map.sources.add(datasourceOne);
+            map.layers.add(new atlas.layer.LineLayer(datasourceOne, "topFloor", {
+                strokeColor: '#2272B9',
+                strokeWidth: 5,
+                lineJoin: 'round',
+                lineCap: 'round'
+            }), 'labels');
+            map.layers.move("topFloor");
+            map.layers.getLayerById("topFloor").setOptions({ visible: false });
+
+            // Zero floor
+            datasourceZero = new atlas.source.DataSource();
+            map.sources.add(datasourceZero);
+            map.layers.add(new atlas.layer.LineLayer(datasourceZero, "zeroFloor", {
+                strokeColor: '#2272B9',
+                strokeWidth: 5,
+                lineJoin: 'round',
+                lineCap: 'round'
+            }), 'labels');
+            map.layers.move("zeroFloor", "topFloor");
+            map.layers.getLayerById("zeroFloor").setOptions({ visible: false });
+
+            // Ground floor - ground floor
+            datasourceNeg = new atlas.source.DataSource();
+            map.sources.add(datasourceNeg);
+            map.layers.add(new atlas.layer.LineLayer(datasourceNeg, "negFloor", {
+                strokeColor: '#2272B9',
+                strokeWidth: 5,
+                lineJoin: 'round',
+                lineCap: 'round'
+            }), 'labels');
+            map.layers.move("negFloor", "zeroFloor");
+            map.layers.getLayerById("negFloor").setOptions({ visible: false });
+
+            //Add a layer for rendering point data.
+            map.layers.add(new atlas.layer.SymbolLayer(datasourceOne, null, {
+                iconOptions: {
+                    image: ['get', 'iconImage'],
+                    allowOverlap: true,
+                    ignorePlacement: true
+                },
+                textOptions: {
+                    textField: ['get', 'title'],
+                    offset: [0, 1]
+                },
+                filter: ['any', ['==', ['geometry-type'], 'Point'], ['==', ['geometry-type'], 'MultiPoint']] //Only render Point or MultiPoints in this layer.
+            }));
+
+            });
+
+        map.events.add("click", function (e) {
+
+            var features = map.layers.getRenderedShapes(e.position, "unit");
+
+            // Checks the room when the user clicks the room, if it's on the active presentation list,
+            // then print the presentation info if it matches the active room
+            if (features.length > 0) {
+
+                var loopGate = true;
+                currentLatLong.lat = e.position[1];
+                currentLatLong.long = e.position[0];
+                for (var i = 0; i < result.length; i++) {
+
+                    if (features[0]["properties"]["name"] == result[i].Room) {
+
+                        /*
+                        var tempData = {
+                            title: result[i].ProjectName,
+                            Sponsor: result[i].Sponsor,
+                            Advisor: result[i].Advisor,
+                            Student1: result[i].Student1,
+                            Student2: result[i].Student2,
+                            Student3: result[i].Student3,
+                            Student4: result[i].Student4,
+                            Major: result[i].Major,
+                        
+                        };*/
+                        
+                        var popupTemp =
+                            `<div class="PresentationStyle" style="color: ${TextColorSwitch(result[i].Major)}">
+                                <b>${result[i].ProjectName}<b/> \
+                                <p>
+                                    Directions: <button onclick="setTo()">To</button><button onclick="setFrom()">From</button><button onclick="clearDir()">Clear</button> <br />\
+                                    Sponsor: ${result[i].Sponsor}<br /> \
+                                    Advisor: ${result[i].Advisor}<br /> \
+                                    Student: ${result[i].Student1}<br /> \
+                                    Student: ${result[i].Student2}<br /> \
+                                    Student: ${result[i].Student3}<br /> \
+                                    Student: ${result[i].Student4}<br /> \
+                                    Dept: ${result[i].Major}<br />
+                                <p/>
+                            <div/>`;
+
+                        //var properties = {textColor: 'rgba(255,255,255)'};
+
+                        popup.setOptions({
+                            //Update the content of the popup.
+                            //content: atlas.PopupTemplate.applyTemplate(tempData, properties),
+                            content: popupTemp,
+
+                            fillColor: ColorSwitch(result[i].Major),
+                            
+                            //Update the popup's position with the symbol's coordinate.
+                            position: [e.position[0], e.position[1]]
+
+                        });
+
+                        //Open the popup.
+                        popup.open(map);
+
+                        // Closing gate
+                        loopGate = false;
+
+                    }
+
+                };
+
+                if (loopGate) {
+                    // The pop-up window for directions to, from and clearing
+                    var popupTemp =
+                    `<div class="popupStyle" style="color: white">
+                    <h2>Directions<h2/> \
+                    <button onclick="setTo()">To</button><button onclick="setFrom()">From</button><button onclick="clearDir()">Clear</button> \
+                    <div/>`;
+
+                    popup.setOptions({
+                        //Update the content of the popup.
+                        content: popupTemp,
+
+                        //Update the popup's position with the symbol's coordinate.
+                        position: [e.position[0], e.position[1]]
+
+                    });
+
+                    //Open the popup.
+                    popup.open(map);
+                }
+            }
+        });
+
+        function floorVis() {
+            var visON = { visible: true };
+            var visOFF = { visible: false };
+            switch (currentFloor) {
+                case (1):
+                    map.layers.getLayerById("topFloor").setOptions(visON);
+                    map.layers.getLayerById("zeroFloor").setOptions(visOFF);
+                    map.layers.getLayerById("negFloor").setOptions(visOFF);
+                    break;
+                case (0):
+                    map.layers.getLayerById("zeroFloor").setOptions(visON);
+                    map.layers.getLayerById("topFloor").setOptions(visOFF);
+                    map.layers.getLayerById("negFloor").setOptions(visOFF);
+                    break;
+                case (-1):
+                    map.layers.getLayerById("negFloor").setOptions(visON);
+                    map.layers.getLayerById("topFloor").setOptions(visOFF);
+                    map.layers.getLayerById("zeroFloor").setOptions(visOFF);
+                    break;
+            }
+        }
+
+        function clearDir() {
+            datasourceOne.clear();
+            datasourceZero.clear();
+            datasourceNeg.clear();
+
+            fromDir.floor = null;
+            fromDir.lat = null;
+            fromDir.lon = null;
+
+            toDir.floor = null;
+            toDir.lat = null;
+            toDir.lon = null;
+
+            routeActive = false;
+        }
+
+        function setTo() {
+            toDir.floor = currentFloor;
+            toDir.lat = currentLatLong.lat;
+            toDir.long = currentLatLong.long;
+
+            if ((fromDir.floor != null) &&
+                (fromDir.lat != null) &&
+                (fromDir.long != null)) {
+                APIController();
+            }
+
+        }
+
+        function setFrom() {
+            fromDir.floor = currentFloor;
+            fromDir.lat = currentLatLong.lat;
+            fromDir.long = currentLatLong.long;
+            // This grabs the users location in real-time
+            // Can't use yet, because there is no way to check floor level
+
+            //map.events.add('ready', function () {
+            //        //Request the user's location
+            //        navigator.geolocation.getCurrentPosition(function (position) {
+            //            fromDir.floor = currentFloor,
+            //            fromDir.lat = position.coords.latitude,
+            //            fromDir.long = position.coords.longitude
+            //    });
+            //});
+
+            if ((toDir.floor != null) &&
+                (toDir.lat != null) &&
+                (toDir.long != null)) {
+                APIController();
+            }
+        }
+
+        function APIController() {
+
+            var restRoutingRequestUrl = `https://us.atlas.microsoft.com/wayfinding/path?api-version=2022-09-01-preview&subscription-key=${subscriptionKey}&routesetid=${routeID}&facilityid=FCL38&fromPoint=${fromDir.lat}, ${fromDir.long}&fromLevel=${fromDir.floor}&toPoint=${toDir.lat}, ${toDir.long} &toLevel=${toDir.floor}`
+
+            if (routeActive) {
+                clearDir();
+            }
+
+            processRequest(restRoutingRequestUrl).then(response => {
+                var route = response.paths[0];
+                var OneFloor = [];
+                var ZeroFloor = [];
+                var NegFloor = [];
+                var startFloor = route.legs[0].startLevel;
+
+                var options = { visible: false };
+
+                var drawFloor;
+                for (var legIndex = 0; legIndex < route.legs.length; legIndex++) {
+                    var leg = route.legs[legIndex];
+
+                    drawFloor = leg.startLevel;
+
+                    //Convert the route point data into a format that the map control understands.
+                    var legCoordinates = leg.points.map(function (point) {
+                        return [point.longitude, point.latitude];
+                    });
+
+                    //Combine the route point data for each route leg together to form a single path.
+                    switch (drawFloor) {
+                        // Top floor
+                        case (1):
+                            OneFloor = OneFloor.concat(legCoordinates);
+                            break;
+                        // Floor one
+                        case (0):
+                            ZeroFloor = ZeroFloor.concat(legCoordinates);
+                            break;
+                        // Ground floor
+                        case (-1):
+                            NegFloor = NegFloor.concat(legCoordinates);
+                            break;
+                    }
+                }
+
+                //Create a line from the route path points and add it to the data source.
+
+                var routeLine = new atlas.data.LineString(OneFloor, "CurrentLineLayer");
+                datasourceOne.add(routeLine);
+
+                var routeLine = new atlas.data.LineString(ZeroFloor, "CurrentLineLayer");
+                datasourceZero.add(routeLine);
+
+                var routeLine = new atlas.data.LineString(NegFloor, "CurrentLineLayer");
+                datasourceNeg.add(routeLine);
+
+                // Showing correct layer
+                floorVis();
+            });
+
+            routeActive = true;
+        }
+
+        async function processRequest(url) {
+            
+            const response = await fetch(url);
+            const jsonDataGet = await response.json();
+
+            return (jsonDataGet);
+        };
+
+        function ColorSwitch(major){
+            var majorColor;
+            switch (major.toLowerCase()) {
+                case "csse":
+                    majorColor = "#1e417b";
+                    break;
+                case "ibe":
+                    majorColor = "#F2665E";
+                    break;
+                case "met":
+                    majorColor = "#99CC00";
+                    break;
+                case "ecet":
+                    majorColor = "#E98300";
+                    break;
+                case "me":
+                    majorColor = "#FFD100";
+                    break;
+                case "ece":
+                    majorColor = "#008755";
+                    break;
+                case "ie":
+                    majorColor = "#000321";
+                    break;
+                case "plet":
+                    majorColor = "#491D70";
+                    break;
+                case "computer science and software engineering":
+                    majorColor = "#1e417b";
+                    break;
+                case "interdisciplinary business with engineering studies":
+                    majorColor = "#F2665E";
+                    break;
+                case "mechanical engineering technology":
+                    majorColor = "#99CC00";
+                    break;
+                case "electrical and computer engineering technology":
+                    majorColor = "#E98300";
+                    break;
+                case "mechanical engineering":
+                    majorColor = "#FFD100";
+                    break;
+                case "electrical and computer engineering":
+                    majorColor = "#008755";
+                    break;
+                case "industrial engineering":
+                    majorColor = "#000321";
+                    break;
+                case "plastics engineering technology":
+                    majorColor = "#491D70";
+                    break;
+                default:
+                    majorColor = "#1e417b";
+            }
+
+            return (majorColor);
+        }
+
+        function TextColorSwitch(major){
+            var majorColorText;
+            switch (major.toLowerCase()) {
+                case "met":
+                        majorColorText = "#000000";
+                    break;
+                case "me":
+                        majorColorText = "#000000";
+                    break;
+                case "mechanical engineering technology":
+                    majorColorText = "#000000";
+                    break;
+                case "mechanical engineering":
+                    majorColorText = "#000000";
+                    break;
+                default:
+                    majorColorText = "white";
+            }
+
+            return (majorColorText);
+        }
+
+    </script>
+    </main>
+</body>
+</html>
+
+
